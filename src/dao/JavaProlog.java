@@ -19,8 +19,21 @@ import jpl.Term;
  */
 public class JavaProlog {
 
-    private final String prologURL = "C:/Users/Krisztian/Documents/NetBeansProjects/Routes/src/src/uj.pl";
+    private final String prologUtURL = "C:/Users/Krisztian/Documents/NetBeansProjects/Routes/src/src/uj.pl";
+    private final String prologCityConnURL = "C:/Users/Krisztian/Documents/NetBeansProjects/Routes/src/src/cityConn.dat";
     private Pattern pattern = Pattern.compile("loc\\((.+?)\\)");
+    
+    /**
+     * Consulting with prolog files.
+     */
+    public void Consult(){
+        String connStrUt = "consult(" + prologUtURL + ")";
+        Query connUt = new Query(connStrUt);
+        System.out.println(connStrUt + " " + (connUt.hasSolution() ? "Succes" : "Fail"));
+        String connStrCityConn = "consult(" + prologCityConnURL + ")";
+        Query connCityConn = new Query(connStrCityConn);
+        System.out.println(connStrUt + " " + (connCityConn.hasSolution() ? "Succes" : "Fail"));
+    }
 
     /**
      * Query the routes and distances from prolog.
@@ -29,14 +42,11 @@ public class JavaProlog {
      * @return return with Route type
      */
     public List<Route> GetRoutes(String start, String dest) {
+        Consult();
         List<Route> routes = new ArrayList<>();
         List<String> tagValues;
-        String connStr = "consult(" + prologURL + ")";
+        
         String getRoutesStr = "bfs(loc(" + start + "), loc(" + dest + "), X,D)";
-
-        Query conn = new Query(connStr);
-        System.out.println(connStr + " " + (conn.hasSolution() ? "Succes" : "Fail"));
-
         Query getRoutes = new Query(getRoutesStr);
 
         while (getRoutes.hasMoreSolutions()) {
@@ -64,6 +74,7 @@ public class JavaProlog {
      * @return return with String
      */
     public List<String> GetConnectedCities(String name) {
+        Consult();
         String getConnCityStr = "setof(Y,bfs(loc(omaha),X,Y),_)";
         Query q5 = new Query(getConnCityStr);
 

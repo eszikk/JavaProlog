@@ -5,9 +5,14 @@
  */
 package main;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import view.CityPanel;
 import view.MainFrame;
+import view.MapPanel;
+import view.RoutePanel;
 
 /**
  *
@@ -38,14 +43,29 @@ public class Routes {
         mainFrame.setResizable(resizable);
         mainFrame.getContentPane().setLayout(new GridLayout(1, 1));
         
+        
+        //Tab1
+        JPanel tab1 = new JPanel();
+        tab1.setLayout(new BorderLayout());
+        tab1.add(new RoutePanel());
+        tab1.add(new MapPanel());
+        
+        
+        //Tab2
+        JPanel tab2 = new JPanel();
+        tab2.setLayout(new BorderLayout());
+        tab2.add(new CityPanel());
+        tab2.add(new MapPanel());
+        
+        
         JTabbedPane tabPane = new JTabbedPane(JTabbedPane.TOP);
-        tabPane.addTab(tab1Title, null);
-        tabPane.addTab(tab2Title, null);
+        tabPane.addTab(tab1Title, tab1);
+        tabPane.addTab(tab2Title, tab2);
         tabPane.addTab(tab3Title, null);
         
         
         
-                
+               
         mainFrame.add(tabPane);
         mainFrame.setVisible(true);
     }
