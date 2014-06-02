@@ -1,14 +1,4 @@
 
-move(loc(omaha), loc(chicago),1).
-move(loc(omaha), loc(denver),2).
-move(loc(chicago), loc(denver),3).
-move(loc(chicago), loc(los_angeles),4).
-move(loc(chicago), loc(omaha),1).
-move(loc(denver), loc(los_angeles),2).
-move(loc(denver), loc(omaha),3).
-move(loc(los_angeles), loc(chicago),4).
-move(loc(los_angeles), loc(denver),1).
-
 move(A,B) :-
    move(A,B,_).
 
@@ -36,6 +26,13 @@ extend([State|Path], NewPaths) :-
           (move(State, NextState), not(member(NextState, [State|Path]))),
           NewPaths), !.
 extend(_, []).
+
+save(A) :-
+	absolute_file_name(A, C),
+	findall(B, source_file(B, C), D),
+	tell(A),
+	maplist(listing, D),
+	told.
 
 
 
