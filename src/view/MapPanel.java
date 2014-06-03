@@ -6,18 +6,33 @@
 
 package view;
 
+import java.awt.Graphics;
+import main.Controller;
+
 /**
  *
  * @author Krisztian
  */
 public class MapPanel extends javax.swing.JPanel {
+    private final Integer height=445;
+    private final Integer width=600;
 
     /**
      * Creates new form MapPanel
      */
     public MapPanel() {
+        this.setSize(width, height);
         initComponents();
+        
     }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+        Controller.DrawMap(g);
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,11 +49,11 @@ public class MapPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGap(0, 600, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 350, Short.MAX_VALUE)
+            .addGap(0, 500, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
