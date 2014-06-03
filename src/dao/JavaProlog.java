@@ -19,7 +19,7 @@ import jpl.Term;
  */
 public class JavaProlog {
 
-    private final String prologUtURL = "C:/Users/Krisztian/Documents/NetBeansProjects/Routes/src/src/uj.pl";
+    private final String prologUtURL = "c:/Users/Krisztian/Documents/NetBeansProjects/Routes/src/src/ut.pl";
     private final String prologCityConnURL = "C:/Users/Krisztian/Documents/NetBeansProjects/Routes/src/src/cityConn.dat";
     private Pattern pattern = Pattern.compile("loc\\((.+?)\\)");
     
@@ -27,10 +27,10 @@ public class JavaProlog {
      * Consulting with prolog files.
      */
     public void Consult(){
-        String connStrUt = "consult(" + prologUtURL + ")";
+        String connStrUt = "consult('"+ prologUtURL +"')";
         Query connUt = new Query(connStrUt);
         System.out.println(connStrUt + " " + (connUt.hasSolution() ? "Succes" : "Fail"));
-        String connStrCityConn = "consult(" + prologCityConnURL + ")";
+        String connStrCityConn = "consult('"+ prologCityConnURL +"')";
         Query connCityConn = new Query(connStrCityConn);
         System.out.println(connStrUt + " " + (connCityConn.hasSolution() ? "Succes" : "Fail"));
     }
@@ -48,7 +48,8 @@ public class JavaProlog {
         
         String getRoutesStr = "bfs(loc(" + start + "), loc(" + dest + "), X,D)";
         Query getRoutes = new Query(getRoutesStr);
-
+        
+        
         while (getRoutes.hasMoreSolutions()) {
             tagValues = new ArrayList<>();
 
@@ -75,7 +76,7 @@ public class JavaProlog {
      */
     public List<String> GetConnectedCities(String name) {
         Consult();
-        String getConnCityStr = "setof(Y,bfs(loc(omaha),X,Y),_)";
+        String getConnCityStr = "setof(Y,bfs(loc("+name+"),X,Y),_)";
         Query q5 = new Query(getConnCityStr);
 
         List<String> tagValues = new ArrayList<>();
@@ -93,6 +94,7 @@ public class JavaProlog {
         }
 
         return tagValues;
+
     }
 
 }

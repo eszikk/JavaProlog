@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package view;
 
 import entity.City;
+import entity.Route;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import main.Controller;
 
 /**
@@ -20,46 +19,49 @@ public class RoutePanel extends javax.swing.JPanel {
 
     private final Integer height = 445;
     private final Integer width = 200;
-    
+
     public RoutePanel() {
-        this.setSize(width, height);
 
         initComponents();
+        this.setSize(width, height);
+
         cmbDestCity.setEnabled(false);
         cmbRoutes.setEnabled(false);
         SetStartComboBox();
-        
+
     }
-    
+
     private void SetStartComboBox() {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
         List<City> list = Controller.GetCities();
         for (City c : list) {
             model.addElement(c);
         }
-        cmbStartCity.setModel(model);        
+        cmbStartCity.setModel(model);
     }
-    
+
     private void SetDestComboBox() {
         cmbDestCity.setEnabled(true);
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-        List<City> list = Controller.GetCities();
-        for (City c : list) {
-            model.addElement(c);
+        City c = (City) cmbStartCity.getSelectedItem();
+        List<String> list = Controller.GetConnectedCities(c);
+        for (String s : list) {
+            model.addElement(s);
         }
-        cmbDestCity.setModel(model);                
+        cmbDestCity.setModel(model);
     }
-    
-    private void SetListbox(){
-        cmbRoutes.setEnabled(true);
-                DefaultComboBoxModel model = new DefaultComboBoxModel();
-        List<City> list = Controller.GetCities();
-        for (City c : list) {
-            model.addElement(c);
-        }
-        cmbRoutes.setModel(model); 
 
-        
+    private void SetRouteComboBox() {
+        cmbRoutes.setEnabled(true);
+
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        String startName = ((City)cmbStartCity.getSelectedItem()).getName();
+        String destName = (String) cmbDestCity.getSelectedItem();
+        List<Route> list = Controller.GetRoutes(startName, destName);
+        for (Route r : list) {
+            model.addElement(r);
+        }
+        cmbRoutes.setModel(model);
 
     }
 
@@ -111,15 +113,15 @@ public class RoutePanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbStartCity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmbDestCity, 0, 180, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(cmbRoutes, 0, 180, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(0, 62, Short.MAX_VALUE))
+                    .addComponent(cmbStartCity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbDestCity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbRoutes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -146,7 +148,7 @@ public class RoutePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_cmbStartCityActionPerformed
 
     private void cmbDestCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDestCityActionPerformed
-        SetListbox();
+        SetRouteComboBox();
     }//GEN-LAST:event_cmbDestCityActionPerformed
 
     private void cmbRoutesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbRoutesActionPerformed

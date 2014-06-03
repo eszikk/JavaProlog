@@ -7,3 +7,4 @@ move(loc(warso), loc(london),2).
 move(loc(warso), loc(budapest),3).
 move(loc(london), loc(moszkva),4).
 move(loc(london), loc(warso),1).
+move(loc(madrid), loc(roma),1).

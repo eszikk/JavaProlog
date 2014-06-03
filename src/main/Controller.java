@@ -7,7 +7,9 @@
 package main;
 
 import dao.FileDao;
+import dao.JavaProlog;
 import entity.City;
+import entity.Route;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -57,6 +59,17 @@ public class Controller {
         }
         return null;
         
+    }
+    
+    public static List<String> GetConnectedCities(City par){
+        JavaProlog prDao = new JavaProlog();
+        return prDao.GetConnectedCities(par.getName());
+    }
+    
+    public static List<Route> GetRoutes(String start,String dest){
+        JavaProlog prDao = new JavaProlog();
+        
+        return prDao.GetRoutes(start, dest);
     }
     
     

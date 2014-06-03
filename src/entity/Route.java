@@ -39,12 +39,11 @@ public class Route {
 
     @Override
     public String toString() {
-        String output="Cities:\n";
-        
+        String output="";
         for(String s:cityList){
-            output+=s+"\n";
+            output+=s+"->";
         }
-        output+="Distance: "+distance;
+        output+="\nDistance: "+distance;
         return output;
         
     }
