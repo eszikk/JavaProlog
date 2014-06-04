@@ -10,6 +10,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import view.CityConnPanel;
 import view.CityPanel;
 import view.MainFrame;
 import view.MapPanel;
@@ -27,8 +28,8 @@ public class Routes {
     private static final Boolean resizable = false;
     private static final String tab1Title = "Flight routes";
     private static final String tab2Title = "Cities";
-    private static final String tab3Title = "City Connection";
-    private static final String tab4Title = "Flight routes";
+    private static final String tab3Title = "City Connections";
+
 
     /**
      * @param args the command line arguments
@@ -46,7 +47,6 @@ public class Routes {
         
         
         //Tab1
-        
         JPanel tab1 = new JPanel(new BorderLayout());
         tab1.add(new RoutePanel(),BorderLayout.WEST);
         tab1.add(new MapPanel(),BorderLayout.EAST);
@@ -58,11 +58,17 @@ public class Routes {
         tab2.add(new CityPanel(),BorderLayout.WEST);
         tab2.add(new MapPanel(),BorderLayout.EAST);
         
+        //Tab3
+        JPanel tab3 = new JPanel(new BorderLayout());
+        
+        tab3.add(new CityConnPanel(),BorderLayout.WEST);
+        tab3.add(new MapPanel(),BorderLayout.EAST);
+        
         
         JTabbedPane tabPane = new JTabbedPane(JTabbedPane.TOP);
         tabPane.addTab(tab1Title, tab1);
         tabPane.addTab(tab2Title, tab2);
-        tabPane.addTab(tab3Title, null);
+        tabPane.addTab(tab3Title, tab3);
         
         
         
