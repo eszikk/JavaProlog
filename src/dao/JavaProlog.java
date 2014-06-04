@@ -5,6 +5,7 @@
  */
 package dao;
 
+import entity.City;
 import entity.Route;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +45,15 @@ public class JavaProlog {
     public List<Route> GetRoutes(String start, String dest) {
         Consult();
         List<Route> routes = new ArrayList<>();
-        List<String> tagValues;
+        List<City> tagValues;
         
         String getRoutesStr = "bfs(loc(" + start + "), loc(" + dest + "), X,D)";
         Query getRoutes = new Query(getRoutesStr);
         
+        FileDao fDao = new FileDao();
+        List<City> cities = fDao.GetCities();
+        Integer cityX=0;
+        Integer cityY=0;
         
         while (getRoutes.hasMoreSolutions()) {
             tagValues = new ArrayList<>();
@@ -59,9 +64,18 @@ public class JavaProlog {
             Integer dist = Integer.parseInt(t2.toString());
 
             Matcher matcher = pattern.matcher(st);
-
+            
+            
+            
             while (matcher.find()) {
-                tagValues.add(matcher.group(1));
+                for(City c: cities){
+                    if(matcher.group(1).equals(c.getName())){
+                        cityX = c.getCoordX();
+                        cityY = c.getCoordY();
+                    }
+                }
+                
+                tagValues.add(new City(cityX,cityY,matcher.group(1)));
             }
             routes.add(new Route(tagValues, dist));
         }

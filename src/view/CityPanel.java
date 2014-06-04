@@ -43,82 +43,42 @@ public class CityPanel extends javax.swing.JPanel {
         btnSave = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
 
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         btnGrp.add(rbtnNew);
         rbtnNew.setText("New");
+        add(rbtnNew, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 7, -1, -1));
 
         btnGrp.add(rbtnModDel);
-        rbtnModDel.setText("Modify/Delete");
+        rbtnModDel.setText("Delete");
+        add(rbtnModDel, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 7, -1, -1));
 
         cmbCity.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        add(cmbCity, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 63, 158, -1));
 
         jLabel1.setText("Name:");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 101, -1, -1));
 
         txtName.setText("jTextField1");
+        add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 121, 158, -1));
 
         txtCoordX.setText("jTextField1");
+        add(txtCoordX, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 172, 158, -1));
 
         txtCoordY.setText("Coord X:");
+        add(txtCoordY, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 152, -1, -1));
 
         jTextField3.setText("jTextField1");
+        add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 223, 158, -1));
 
         jLabel3.setText("Coord Y:");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 203, -1, -1));
 
         btnSave.setText("Save");
+        add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 284, 158, -1));
 
         btnDelete.setText("Delete");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbCity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtName)
-                    .addComponent(txtCoordX, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(rbtnNew)
-                                .addGap(18, 18, 18)
-                                .addComponent(rbtnModDel))
-                            .addComponent(jLabel1)
-                            .addComponent(txtCoordY)
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rbtnNew)
-                    .addComponent(rbtnModDel))
-                .addGap(33, 33, 33)
-                .addComponent(cmbCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtCoordY)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCoordX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(btnSave)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnDelete)
-                .addContainerGap(164, Short.MAX_VALUE))
-        );
+        add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 313, 158, -1));
     }// </editor-fold>//GEN-END:initComponents
 
 

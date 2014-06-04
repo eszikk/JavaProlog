@@ -13,15 +13,15 @@ import java.util.List;
  * @author Krisztian
  */
 public class Route {
-    private List<String> cityList;
+    private List<City> cityList;
     private Integer distance;
 
-    public Route(List<String> cityList, Integer distance) {
+    public Route(List<City> cityList, Integer distance) {
         this.cityList = cityList;
         this.distance = distance;
     }
 
-    public List<String> getCityList() {
+    public List<City> getCityList() {
         return cityList;
     }
 
@@ -29,7 +29,7 @@ public class Route {
         return distance;
     }
 
-    public void setCityList(List<String> cityList) {
+    public void setCityList(List<City> cityList) {
         this.cityList = cityList;
     }
 
@@ -40,10 +40,10 @@ public class Route {
     @Override
     public String toString() {
         String output="";
-        for(String s:cityList){
-            output+=s+"->";
+        for(int i=0;i<cityList.size();i++){
+            output+=cityList.get(i).getName()+ (i<cityList.size()-1 ? " > ":" ");
         }
-        output+="\nDistance: "+distance;
+        output+=" Dist: "+distance;
         return output;
         
     }

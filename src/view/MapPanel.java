@@ -6,6 +6,8 @@
 
 package view;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import main.Controller;
 
@@ -13,7 +15,7 @@ import main.Controller;
  *
  * @author Krisztian
  */
-public class MapPanel extends javax.swing.JPanel {
+public  class MapPanel extends javax.swing.JPanel {
     private final Integer height=445;
     private final Integer width=600;
 
@@ -24,12 +26,18 @@ public class MapPanel extends javax.swing.JPanel {
         this.setSize(width, height);
         initComponents();
         
+        
+        
+        
     }
+    
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected  void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
-        Controller.DrawMap(g);
+        Controller.SetGraphics(g,this);
+        Controller.DrawMap();
+        
     }
     
     
@@ -44,6 +52,7 @@ public class MapPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         setBackground(new java.awt.Color(255, 255, 153));
+        setMinimumSize(new java.awt.Dimension(600, 500));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

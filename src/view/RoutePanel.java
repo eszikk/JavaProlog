@@ -9,6 +9,7 @@ import entity.City;
 import entity.Route;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import main.Controller;
 
 /**
@@ -26,7 +27,7 @@ public class RoutePanel extends javax.swing.JPanel {
         this.setSize(width, height);
 
         cmbDestCity.setEnabled(false);
-        cmbRoutes.setEnabled(false);
+        
         SetStartComboBox();
 
     }
@@ -52,16 +53,18 @@ public class RoutePanel extends javax.swing.JPanel {
     }
 
     private void SetRouteComboBox() {
-        cmbRoutes.setEnabled(true);
+        
 
-        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        DefaultListModel model = new DefaultListModel();
         String startName = ((City)cmbStartCity.getSelectedItem()).getName();
         String destName = (String) cmbDestCity.getSelectedItem();
         List<Route> list = Controller.GetRoutes(startName, destName);
         for (Route r : list) {
             model.addElement(r);
         }
-        cmbRoutes.setModel(model);
+        
+        jlist.setModel(model);
+        
 
     }
 
@@ -79,9 +82,14 @@ public class RoutePanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         cmbDestCity = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        cmbRoutes = new javax.swing.JComboBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jlist = new javax.swing.JList();
+
+        setMaximumSize(new java.awt.Dimension(175, 500));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Start city:");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, -1, -1));
 
         cmbStartCity.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbStartCity.addActionListener(new java.awt.event.ActionListener() {
@@ -89,58 +97,29 @@ public class RoutePanel extends javax.swing.JPanel {
                 cmbStartCityActionPerformed(evt);
             }
         });
+        add(cmbStartCity, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 31, 155, -1));
 
         jLabel2.setText("Destination city:");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 69, -1, -1));
 
         cmbDestCity.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbDestCityActionPerformed(evt);
             }
         });
+        add(cmbDestCity, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 89, 155, -1));
 
         jLabel3.setText("Routes:");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 127, -1, -1));
 
-        cmbRoutes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbRoutesActionPerformed(evt);
+        jlist.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jlistMouseReleased(evt);
             }
         });
+        jScrollPane1.setViewportView(jlist);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(0, 62, Short.MAX_VALUE))
-                    .addComponent(cmbStartCity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmbDestCity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmbRoutes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbStartCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbDestCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbRoutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(333, Short.MAX_VALUE))
-        );
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 147, 155, 183));
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmbStartCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStartCityActionPerformed
@@ -151,17 +130,20 @@ public class RoutePanel extends javax.swing.JPanel {
         SetRouteComboBox();
     }//GEN-LAST:event_cmbDestCityActionPerformed
 
-    private void cmbRoutesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbRoutesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbRoutesActionPerformed
+    private void jlistMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlistMouseReleased
+        if(jlist.getSelectedValue()!=null){
+           Controller.DrawRoutes((Route) jlist.getSelectedValue());
+        }
+    }//GEN-LAST:event_jlistMouseReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cmbDestCity;
-    private javax.swing.JComboBox cmbRoutes;
     private javax.swing.JComboBox cmbStartCity;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList jlist;
     // End of variables declaration//GEN-END:variables
 }

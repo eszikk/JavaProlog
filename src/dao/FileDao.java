@@ -20,7 +20,7 @@ public class FileDao {
     private final String cityURL = "/src/city.dat";
     private final String CHAR_SET = "UTF-8";
 
-        public List<City> GetCities() throws Exception{
+        public List<City> GetCities(){
         List<City> cityList = new ArrayList<>();
         InputStream ins = getClass().getResourceAsStream(cityURL);
         Scanner fileScanner = new Scanner(ins, CHAR_SET);
