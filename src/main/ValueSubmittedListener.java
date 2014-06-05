@@ -11,5 +11,5 @@ package main;
  * @author Krisztian
  */
 public interface ValueSubmittedListener {
-    public void OnSubmitted();
+    public void OnSubmitted(Integer tab);
 }

@@ -17,6 +17,7 @@ import main.ValueSubmittedListener;
 public  class MapPanel extends javax.swing.JPanel implements ValueSubmittedListener{
     private final Integer height=445;
     private final Integer width=600;
+    private Integer TAB = 3;
 
     /**
      * Creates new form MapPanel
@@ -30,7 +31,7 @@ public  class MapPanel extends javax.swing.JPanel implements ValueSubmittedListe
     @Override
     protected  void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
-        Controller.Draw(g);
+        Controller.Draw(g,TAB);
         
     }
     
@@ -65,7 +66,8 @@ public  class MapPanel extends javax.swing.JPanel implements ValueSubmittedListe
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void OnSubmitted() {
+    public void OnSubmitted(Integer t) {
+        TAB = t;
         this.repaint();
     }
 }

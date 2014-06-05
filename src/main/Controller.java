@@ -30,6 +30,10 @@ import view.MapPanel;
  */
 public class Controller {
 
+    private static final Integer TAB_1 = 0;
+    private static final Integer TAB_2 = 1;
+    private static final Integer TAB_3 = 2;
+
     private static final String mapImageURL = "C:\\Users\\Krisztian\\Documents\\NetBeansProjects\\Routes\\src\\src\\map.gif";
     private static Image map;
     private static final Integer mapWidth = 600;
@@ -43,49 +47,57 @@ public class Controller {
      *
      * @param g
      */
-    public static void Draw(Graphics g) {
-        try {
-            map = ImageIO.read(new File(mapImageURL));
-        } catch (IOException ex) {
-            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+    public static void Draw(Graphics g, Integer TAB) {
+                    try {
+                map = ImageIO.read(new File(mapImageURL));
+            } catch (IOException ex) {
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            g.drawImage(map, mapX, mapY, mapWidth, mapHeight, null);
+        
+        if (TAB == TAB_1) {
+
+            if (routes != null) {
+                Integer X;
+                Integer Y;
+                Integer r = 10;
+
+                if (routes.getCityList().size() == 2) {
+                    g.setColor(Color.GRAY);
+                    Graphics2D g2 = (Graphics2D) g;
+                    g2.setStroke(new BasicStroke(3));
+                    g2.drawLine(routes.getCityList().get(0).getCoordX(), routes.getCityList().get(0).getCoordY(),
+                            routes.getCityList().get(1).getCoordX(), routes.getCityList().get(1).getCoordY());
+                } else {
+                    g.setColor(Color.GRAY);
+                    Graphics2D g2 = (Graphics2D) g;
+                    g2.setStroke(new BasicStroke(3));
+
+                    for (int i = 0; i < routes.getCityList().size() - 1; i++) {
+                        g2.drawLine(routes.getCityList().get(i).getCoordX(), routes.getCityList().get(i).getCoordY(),
+                                routes.getCityList().get(i + 1).getCoordX(), routes.getCityList().get(i + 1).getCoordY());
+                    }
+
+                }
+
+                for (City c : routes.getCityList()) {
+                    X = c.getCoordX() - (r / 2);
+                    Y = c.getCoordY() - (r / 2);
+
+                    g.setColor(Color.red);
+                    g.fillOval(X, Y, r, r);
+                    g.setFont(new Font("Arial Black", Font.BOLD, 12));
+                    g.setColor(Color.BLACK);
+                    g.drawString(c.getName(), X, Y);
+                }
+
+            }
         }
-        g.drawImage(map, mapX, mapY, mapWidth, mapHeight, null);
-
-        if (routes != null) {
-            Integer X;
-            Integer Y;
-            Integer r = 10;
+        if(TAB == TAB_2){
             
-            if(routes.getCityList().size()==2){
-                g.setColor(Color.GRAY);
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setStroke(new BasicStroke(3));
-                g2.drawLine(routes.getCityList().get(0).getCoordX(), routes.getCityList().get(0).getCoordY(),
-                        routes.getCityList().get(1).getCoordX(), routes.getCityList().get(1).getCoordY());
-            }else
-            {
-                g.setColor(Color.GRAY);
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setStroke(new BasicStroke(3));
-                
-                for(int i=0;i<routes.getCityList().size()-1;i++)
-                g2.drawLine(routes.getCityList().get(i).getCoordX(), routes.getCityList().get(i).getCoordY(),
-                        routes.getCityList().get(i+1).getCoordX(), routes.getCityList().get(i+1).getCoordY());
+        }
+        if(TAB == TAB_3){
             
-            }
-            
-
-            for (City c : routes.getCityList()) {
-                X = c.getCoordX() - (r / 2);
-                Y = c.getCoordY() - (r / 2);
-                
-                g.setColor(Color.red);
-                g.fillOval(X, Y, r, r);
-                g.setFont(new Font("Arial Black", Font.BOLD, 12));
-                g.setColor(Color.BLACK);
-                g.drawString(c.getName(), X, Y);
-            }
-
         }
 
     }
@@ -120,7 +132,5 @@ public class Controller {
     public static void setRoutes(Route routes) {
         Controller.routes = routes;
     }
-    
-    
 
 }

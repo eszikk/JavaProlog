@@ -41,7 +41,7 @@ public class RoutePanel extends javax.swing.JPanel {
     
         private void notifyListeners() {
         for (ValueSubmittedListener listener : listeners) {
-            listener.OnSubmitted();
+            listener.OnSubmitted(0);
         }
     }
 
