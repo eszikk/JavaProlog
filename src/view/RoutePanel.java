@@ -7,10 +7,12 @@ package view;
 
 import entity.City;
 import entity.Route;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import main.Controller;
+import main.ValueSubmittedListener;
 
 /**
  *
@@ -20,6 +22,7 @@ public class RoutePanel extends javax.swing.JPanel {
 
     private final Integer height = 445;
     private final Integer width = 200;
+    private List<ValueSubmittedListener> listeners = new ArrayList<ValueSubmittedListener>();
 
     public RoutePanel() {
 
@@ -30,6 +33,16 @@ public class RoutePanel extends javax.swing.JPanel {
         
         SetStartComboBox();
 
+    }
+    
+    public void addListener(ValueSubmittedListener listener) {
+        listeners.add(listener);
+    }
+    
+        private void notifyListeners() {
+        for (ValueSubmittedListener listener : listeners) {
+            listener.OnSubmitted();
+        }
     }
 
     private void SetStartComboBox() {
@@ -132,8 +145,9 @@ public class RoutePanel extends javax.swing.JPanel {
 
     private void jlistMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlistMouseReleased
         if(jlist.getSelectedValue()!=null){
-           Controller.DrawRoutes((Route) jlist.getSelectedValue());
+           Controller.setRoutes((Route) jlist.getSelectedValue());
         }
+        notifyListeners();
     }//GEN-LAST:event_jlistMouseReleased
 
 

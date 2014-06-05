@@ -9,9 +9,11 @@ import dao.FileDao;
 import dao.JavaProlog;
 import entity.City;
 import entity.Route;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -28,21 +30,20 @@ import view.MapPanel;
  */
 public class Controller {
 
-    private static String mapImageURL = "C:\\Users\\Krisztian\\Documents\\NetBeansProjects\\Routes\\src\\src\\map.gif";
+    private static final String mapImageURL = "C:\\Users\\Krisztian\\Documents\\NetBeansProjects\\Routes\\src\\src\\map.gif";
     private static Image map;
-    private static Integer mapWidth = 600;
-    private static Integer mapHeight = 445;
-    private static Integer mapX = 0;
-    private static Integer mapY = 0;
-    private static Graphics g;
-    private static MapPanel mapPanel;
+    private static final Integer mapWidth = 600;
+    private static final Integer mapHeight = 445;
+    private static final Integer mapX = 0;
+    private static final Integer mapY = 0;
+    private static Route routes;
 
     /**
      * Draws the map to the panel.
      *
      * @param g
      */
-    public static void DrawMap() {
+    public static void Draw(Graphics g) {
         try {
             map = ImageIO.read(new File(mapImageURL));
         } catch (IOException ex) {
@@ -50,11 +51,43 @@ public class Controller {
         }
         g.drawImage(map, mapX, mapY, mapWidth, mapHeight, null);
 
-    }
+        if (routes != null) {
+            Integer X;
+            Integer Y;
+            Integer r = 10;
+            
+            if(routes.getCityList().size()==2){
+                g.setColor(Color.GRAY);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setStroke(new BasicStroke(3));
+                g2.drawLine(routes.getCityList().get(0).getCoordX(), routes.getCityList().get(0).getCoordY(),
+                        routes.getCityList().get(1).getCoordX(), routes.getCityList().get(1).getCoordY());
+            }else
+            {
+                g.setColor(Color.GRAY);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setStroke(new BasicStroke(3));
+                
+                for(int i=0;i<routes.getCityList().size()-1;i++)
+                g2.drawLine(routes.getCityList().get(i).getCoordX(), routes.getCityList().get(i).getCoordY(),
+                        routes.getCityList().get(i+1).getCoordX(), routes.getCityList().get(i+1).getCoordY());
+            
+            }
+            
 
-    public static void SetGraphics(Graphics g, MapPanel panel) {
-        Controller.g = g;
-        Controller.mapPanel = panel;
+            for (City c : routes.getCityList()) {
+                X = c.getCoordX() - (r / 2);
+                Y = c.getCoordY() - (r / 2);
+                
+                g.setColor(Color.red);
+                g.fillOval(X, Y, r, r);
+                g.setFont(new Font("Arial Black", Font.BOLD, 12));
+                g.setColor(Color.BLACK);
+                g.drawString(c.getName(), X, Y);
+            }
+
+        }
+
     }
 
     /**
@@ -84,22 +117,10 @@ public class Controller {
         return routes;
     }
 
-    public static void DrawRoutes(Route route) {
-        Integer X;
-        Integer Y;
-        Integer r = 10;
-        g.setColor(Color.red);
-
-        for (City c : route.getCityList()) {
-            X = c.getCoordX() - (r / 2);
-            Y = c.getCoordY() - (r / 2);
-
-            g.fillOval(X, Y, r, r);
-            g.setFont(new Font("Arial Black", Font.BOLD, 12));
-            g.drawString(c.getName(), X, Y);
-        }
-
+    public static void setRoutes(Route routes) {
+        Controller.routes = routes;
     }
-    //MapPanel.repaint();
+    
+    
 
 }

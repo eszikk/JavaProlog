@@ -48,8 +48,11 @@ public class Routes {
         
         //Tab1
         JPanel tab1 = new JPanel(new BorderLayout());
-        tab1.add(new RoutePanel(),BorderLayout.WEST);
-        tab1.add(new MapPanel(),BorderLayout.EAST);
+        RoutePanel rPanel = new RoutePanel();
+        MapPanel mPanel = new MapPanel();
+        rPanel.addListener(mPanel);
+        tab1.add(rPanel,BorderLayout.WEST);
+        tab1.add(mPanel,BorderLayout.EAST);
         
         
         //Tab2

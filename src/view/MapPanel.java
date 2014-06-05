@@ -6,16 +6,15 @@
 
 package view;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import main.Controller;
+import main.ValueSubmittedListener;
 
 /**
  *
  * @author Krisztian
  */
-public  class MapPanel extends javax.swing.JPanel {
+public  class MapPanel extends javax.swing.JPanel implements ValueSubmittedListener{
     private final Integer height=445;
     private final Integer width=600;
 
@@ -25,18 +24,13 @@ public  class MapPanel extends javax.swing.JPanel {
     public MapPanel() {
         this.setSize(width, height);
         initComponents();
-        
-        
-        
-        
     }
     
 
     @Override
     protected  void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
-        Controller.SetGraphics(g,this);
-        Controller.DrawMap();
+        Controller.Draw(g);
         
     }
     
@@ -69,4 +63,9 @@ public  class MapPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void OnSubmitted() {
+        this.repaint();
+    }
 }
