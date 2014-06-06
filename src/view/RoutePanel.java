@@ -137,6 +137,9 @@ public class RoutePanel extends javax.swing.JPanel {
 
     private void cmbStartCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStartCityActionPerformed
         SetDestComboBox();
+        if(cmbDestCity.getSelectedObjects()!=null){
+             SetRouteComboBox();
+        }
     }//GEN-LAST:event_cmbStartCityActionPerformed
 
     private void cmbDestCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDestCityActionPerformed

@@ -7,6 +7,7 @@ package dao;
 
 import entity.City;
 import entity.Route;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -20,20 +21,22 @@ import jpl.Term;
  */
 public class JavaProlog {
 
-    private final String prologUtURL = "c:/Users/Krisztian/Documents/NetBeansProjects/Routes/src/src/ut.pl";
-    private final String prologCityConnURL = "C:/Users/Krisztian/Documents/NetBeansProjects/Routes/src/src/cityConn.dat";
+    private final String prologUtURL = "src/data/ut.pl";
+    private final String prologCityConnURL = "src/data/cityConn.dat";
     private Pattern pattern = Pattern.compile("loc\\((.+?)\\)");
     
     /**
      * Consulting with prolog files.
      */
     public void Consult(){
-        String connStrUt = "consult('"+ prologUtURL +"')";
+        //String connStrUt_ = "consult('"+ prologUtURL +"')";
+        String connStrUt = "mod1:consult('"+prologUtURL+"')";
         Query connUt = new Query(connStrUt);
         System.out.println(connStrUt + " " + (connUt.hasSolution() ? "Succes" : "Fail"));
-        String connStrCityConn = "consult('"+ prologCityConnURL +"')";
+        //String connStrCityConn = "consult('"+ prologCityConnURL +"')";
+        String connStrCityConn = "mod2:consult('"+prologCityConnURL+"')";
         Query connCityConn = new Query(connStrCityConn);
-        System.out.println(connStrUt + " " + (connCityConn.hasSolution() ? "Succes" : "Fail"));
+        System.out.println(connStrCityConn + " " + (connCityConn.hasSolution() ? "Succes" : "Fail"));
     }
 
     /**
@@ -42,7 +45,7 @@ public class JavaProlog {
      * @param dest  destination city name
      * @return return with Route type
      */
-    public List<Route> GetRoutes(String start, String dest) {
+    public List<Route> GetRoutes(String start, String dest) throws IOException{
         Consult();
         List<Route> routes = new ArrayList<>();
         List<City> tagValues;

@@ -15,26 +15,25 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import view.MapPanel;
 
 /**
  *
  * @author Krisztian
  */
 public class Controller {
-
+    
     private static final Integer TAB_1 = 0;
     private static final Integer TAB_2 = 1;
     private static final Integer TAB_3 = 2;
-
-    private static final String mapImageURL = "C:\\Users\\Krisztian\\Documents\\NetBeansProjects\\Routes\\src\\src\\map.gif";
+    
+    private static final String mapImageURL = "src/data/map.gif";
     private static Image map;
     private static final Integer mapWidth = 600;
     private static final Integer mapHeight = 445;
@@ -45,61 +44,70 @@ public class Controller {
     /**
      * Draws the map to the panel.
      *
-     * @param g
+     * @param g MapPanel Graphics Object.
+     * @param TAB Witch tab is active.
      */
     public static void Draw(Graphics g, Integer TAB) {
-                    try {
-                map = ImageIO.read(new File(mapImageURL));
-            } catch (IOException ex) {
-                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            g.drawImage(map, mapX, mapY, mapWidth, mapHeight, null);
+        try {
+            map = ImageIO.read(new File(mapImageURL));
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        g.drawImage(map, mapX, mapY, mapWidth, mapHeight, null);
         
-        if (TAB == TAB_1) {
-
-            if (routes != null) {
-                Integer X;
-                Integer Y;
-                Integer r = 10;
-
-                if (routes.getCityList().size() == 2) {
-                    g.setColor(Color.GRAY);
-                    Graphics2D g2 = (Graphics2D) g;
-                    g2.setStroke(new BasicStroke(3));
-                    g2.drawLine(routes.getCityList().get(0).getCoordX(), routes.getCityList().get(0).getCoordY(),
-                            routes.getCityList().get(1).getCoordX(), routes.getCityList().get(1).getCoordY());
-                } else {
-                    g.setColor(Color.GRAY);
-                    Graphics2D g2 = (Graphics2D) g;
-                    g2.setStroke(new BasicStroke(3));
-
-                    for (int i = 0; i < routes.getCityList().size() - 1; i++) {
-                        g2.drawLine(routes.getCityList().get(i).getCoordX(), routes.getCityList().get(i).getCoordY(),
-                                routes.getCityList().get(i + 1).getCoordX(), routes.getCityList().get(i + 1).getCoordY());
-                    }
-
+        if (Objects.equals(TAB, TAB_1)) {
+            DrawRoutes(g);  
+        } else
+        if (Objects.equals(TAB, TAB_2)) {
+            DrawCities(g); 
+        } else
+        if (Objects.equals(TAB, TAB_3)) {
+            
+        }
+        
+    }
+    
+    private static void DrawCities(Graphics g){
+        
+    }
+    
+    
+    private static void DrawRoutes(Graphics g) {
+        if (routes != null) {
+            Integer X;
+            Integer Y;
+            Integer r = 10;
+            
+            if (routes.getCityList().size() == 2) {
+                g.setColor(Color.GRAY);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setStroke(new BasicStroke(3));
+                g2.drawLine(routes.getCityList().get(0).getCoordX(), routes.getCityList().get(0).getCoordY(),
+                        routes.getCityList().get(1).getCoordX(), routes.getCityList().get(1).getCoordY());
+            } else {
+                g.setColor(Color.GRAY);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setStroke(new BasicStroke(3));
+                
+                for (int i = 0; i < routes.getCityList().size() - 1; i++) {
+                    g2.drawLine(routes.getCityList().get(i).getCoordX(), routes.getCityList().get(i).getCoordY(),
+                            routes.getCityList().get(i + 1).getCoordX(), routes.getCityList().get(i + 1).getCoordY());
                 }
-
-                for (City c : routes.getCityList()) {
-                    X = c.getCoordX() - (r / 2);
-                    Y = c.getCoordY() - (r / 2);
-
-                    g.setColor(Color.red);
-                    g.fillOval(X, Y, r, r);
-                    g.setFont(new Font("Arial Black", Font.BOLD, 12));
-                    g.setColor(Color.BLACK);
-                    g.drawString(c.getName(), X, Y);
-                }
-
+                
             }
-        }
-        if(TAB == TAB_2){
+            
+            for (City c : routes.getCityList()) {
+                X = c.getCoordX() - (r / 2);
+                Y = c.getCoordY() - (r / 2);
+                
+                g.setColor(Color.red);
+                g.fillOval(X, Y, r, r);
+                g.setFont(new Font("Arial Black", Font.BOLD, 12));
+                g.setColor(Color.BLACK);
+                g.drawString(c.getName(), X, Y);
+            }
             
         }
-        if(TAB == TAB_3){
-            
-        }
-
     }
 
     /**
@@ -115,22 +123,37 @@ public class Controller {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-
+        
     }
-
+    
     public static List<String> GetConnectedCities(City par) {
         JavaProlog prDao = new JavaProlog();
         return prDao.GetConnectedCities(par.getName());
     }
-
+    
     public static List<Route> GetRoutes(String start, String dest) {
-        JavaProlog prDao = new JavaProlog();
-        List<Route> routes = prDao.GetRoutes(start, dest);
-        return routes;
+        try {
+            JavaProlog prDao = new JavaProlog();
+            List<Route> routes1 = prDao.GetRoutes(start, dest);
+            return routes1;
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
-
+    
     public static void setRoutes(Route routes) {
         Controller.routes = routes;
     }
-
+    
+    public static void SaveCity(String name, Integer coordX, Integer coordY) {
+        FileDao fDao = new FileDao();
+        try {
+            fDao.SaveCity(new City(coordX, coordY, name));
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
 }
