@@ -17,6 +17,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -152,7 +153,7 @@ public class Controller {
     }
 
     public static void setForCityPanel(City c) {
-        cPanel =c;
+        cPanel = c;
     }
 
     public static void SaveCity(String name, Integer coordX, Integer coordY) {
@@ -173,15 +174,47 @@ public class Controller {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static void AddCityConn(City start, City dest){
+
+    public static void AddCityConn(City start, City dest) {
         JavaProlog jp = new JavaProlog();
         jp.AddCityConn(start.getName(), dest.getName(), "0000");
     }
-    
-    public static void DelCityConn(City start, City dest){
+
+    public static void DelCityConn(City start, City dest) {
         JavaProlog jp = new JavaProlog();
         jp.DelCityConn(start.getName(), dest.getName(), "0000");
+
+    }
+
+    public static List<City> GetNotP2PConnectedCities(City city) {
+        JavaProlog jp = new JavaProlog();
+        FileDao dao = new FileDao();
+        List<City> list = null;
+        List<City> ret = new ArrayList<>();
+        try {
+            list = dao.GetCities();
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for (City c : list) {
+            if (!jp.GetP2PConnectedCities(city.getName(), c.getName()) && !city.getName().equals(c.getName())) {
+                ret.add(c);
+            }
+        }
+
+        return ret;
+
+    }
+    
+    public static List<City> GetCitiesWhicHaveConn(){
+        JavaProlog jp = new JavaProlog();
+        List <City> result = null;
+        try {
+           result= jp.GetCitiesWhichHaveConn();
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return result;
         
     }
 

@@ -47,7 +47,7 @@ public class RoutePanel extends javax.swing.JPanel {
 
     private void SetStartComboBox() {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-        List<City> list = Controller.GetCities();
+        List<City> list = Controller.GetCitiesWhicHaveConn();
         for (City c : list) {
             model.addElement(c);
         }

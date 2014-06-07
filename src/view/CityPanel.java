@@ -169,6 +169,7 @@ public class CityPanel extends javax.swing.JPanel implements ValueListener {
             Controller.DeleteCity((City) cmbCity.getSelectedItem());
         }
         notifyListeners();
+        txtName.setText("");
         SetComboBox();
     }//GEN-LAST:event_btnSaveActionPerformed
 

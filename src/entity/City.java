@@ -6,6 +6,8 @@
 
 package entity;
 
+import java.util.Objects;
+
 /**
  *
  * @author Krisztian
@@ -49,6 +51,32 @@ public class City {
     public String toString() {
         return name;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final City other = (City) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
+    
     
     
     

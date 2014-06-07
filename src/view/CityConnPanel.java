@@ -7,6 +7,8 @@
 package view;
 
 import entity.City;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import main.Controller;
 
 /**
@@ -20,6 +22,30 @@ public class CityConnPanel extends javax.swing.JPanel {
      */
     public CityConnPanel() {
         initComponents();
+        setGUI();
+    }
+    
+    private void setGUI(){
+        SetCmbBoxStart();
+    }
+    
+    private void SetCmbBoxStart(){
+     DefaultComboBoxModel model = new DefaultComboBoxModel();
+        List<City> list = Controller.GetCities();
+        for (City c : list) {
+            model.addElement(c);
+        }
+        cmbStart.setModel(model);
+    }
+    
+    private void SetCmbBoxDest(){
+             DefaultComboBoxModel model = new DefaultComboBoxModel();
+        List<City> list = Controller.GetNotP2PConnectedCities((City) cmbStart.getSelectedItem());
+        for (City c : list) {
+            model.addElement(c);
+        }
+        cmbDest.setModel(model);
+        
     }
 
     /**
@@ -44,7 +70,11 @@ public class CityConnPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Start city:");
 
-        cmbStart.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbStartActionPerformed(evt);
+            }
+        });
 
         btnGrp.add(rbtnNew);
         rbtnNew.setText("New");
@@ -54,11 +84,7 @@ public class CityConnPanel extends javax.swing.JPanel {
 
         jLabel2.setText("Destination city:");
 
-        cmbDest.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel3.setText("Routes");
-
-        cmbRoutes.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -118,9 +144,15 @@ public class CityConnPanel extends javax.swing.JPanel {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
        City start = new City(0, 0, "test1");
        City dest = new City(0, 0, "test2");
+       Controller.GetCitiesWhicHaveConn();
         
-        Controller.AddCityConn(start, dest);
+        //Controller.AddCityConn(start, dest);
+       //Controller.GetP2PConnectedCities(start, dest);
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void cmbStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStartActionPerformed
+        SetCmbBoxDest();
+    }//GEN-LAST:event_cmbStartActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

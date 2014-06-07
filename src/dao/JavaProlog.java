@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.text.StyledEditorKit;
 import jpl.Query;
 import jpl.Term;
 
@@ -34,11 +33,11 @@ public class JavaProlog {
         String connStrUt = "mod1:consult('" + prologUtURL + "')";
         Query connUt = new Query(connStrUt);
         Boolean r1 = connUt.hasSolution();
-        
+
         String connStrCityConn = "mod2:consult('" + prologCityConnURL + "')";
         Query connCityConn = new Query(connStrCityConn);
         Boolean r2 = connCityConn.hasSolution();
-        
+
         return r1 && r2;
     }
 
@@ -48,6 +47,7 @@ public class JavaProlog {
      * @param start start city name
      * @param dest destination city name
      * @return return with Route type
+     * @throws java.io.IOException
      */
     public List<Route> GetRoutes(String start, String dest) throws IOException {
         Consult();
@@ -97,12 +97,12 @@ public class JavaProlog {
     public List<String> GetConnectedCities(String name) {
         Consult();
         String getConnCityStr = "setof(Y,bfs(loc(" + name + "),X,Y),_)";
-        Query q5 = new Query(getConnCityStr);
+        Query q = new Query(getConnCityStr);
 
         List<String> tagValues = new ArrayList<>();
-        while (q5.hasMoreSolutions()) {
+        while (q.hasMoreSolutions()) {
 
-            Term t1 = (Term) q5.nextSolution().get("X");
+            Term t1 = (Term) q.nextSolution().get("X");
             String st = t1.toString();
 
             Matcher matcher = pattern.matcher(st);
@@ -114,21 +114,55 @@ public class JavaProlog {
         }
         return tagValues;
     }
+    
+    public List<City> GetCitiesWhichHaveConn()throws IOException{
+        Consult();
+        FileDao fdao = new FileDao();
+        List<City> temp = new ArrayList<>();
+        List<City> result = new ArrayList<>();
+        List<City> flist = fdao.GetCities();
+        String getCities = "move(loc(X),loc(_),_).";
+        Query q = new Query(getCities);
+        
+        while(q.hasMoreSolutions()){
+            Term t1 = (Term) q.nextSolution().get("X");
+            String st = t1.toString();
+            temp.add(new City(0, 0, st));       
+        }
+        //remove duplicates
+        for(City c: temp){
+            if(!result.contains(c)){
+                result.add(c);
+            }
+        }
+        
+        //merge with FileDao
+        for(City rc: result){
+                for(City fc:flist){
+                    if(rc.equals(fc)){
+                        rc.setCoordX(fc.getCoordX());
+                        rc.setCoordY(fc.getCoordY());
+                    }
+                    
+                }
+        }
+        return result;
+        
+    }
 
     public Boolean AddCityConn(String start, String dest, String dist) {
         Consult();
 
         String addCityConn = "assert(move(loc(" + start + "), loc(" + dest + ")," + dist + "))";
         Query addRoutes = new Query(addCityConn);
-        Boolean r1 =addRoutes.hasSolution();
+        Boolean r1 = addRoutes.hasSolution();
 
         String addCityConn2 = "assert(move(loc(" + dest + "), loc(" + start + ")," + dist + "))";
         Query addRoutes2 = new Query(addCityConn2);
-        Boolean r2 =addRoutes2.hasSolution();
-
+        Boolean r2 = addRoutes2.hasSolution();
 
         SaveData();
-        
+
         return r1 && r2;
     }
 
@@ -144,7 +178,7 @@ public class JavaProlog {
 
         SaveData();
         return r1 && r2;
-        
+
     }
 
     private Boolean SaveData() {
@@ -153,6 +187,26 @@ public class JavaProlog {
         Query connUt = new Query(save);
         return connUt.hasSolution();
 
+    }
+
+    public Boolean GetP2PConnectedCities(String start, String dest) {
+        Consult();
+
+        String connCityStr = "move(loc(" + start + "), loc(" + dest + "), _).";
+        Query connCityConn = new Query(connCityStr);
+        Boolean r1 = connCityConn.hasSolution();
+
+        String connCityStr2 = "move(loc(" + dest + "), loc(" + start + "), _).";
+        Query connCityConn2 = new Query(connCityStr2);
+        Boolean r2 = connCityConn.hasSolution();
+        
+        return r1 && r2;
+
+    }
+
+    private Boolean GetP2PRoutes() {
+
+        return true;
     }
 
 }
