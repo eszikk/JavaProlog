@@ -5,18 +5,24 @@
  */
 package view;
 
-import java.awt.Dialog;
+import entity.City;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import main.Controller;
+import main.ValueListener;
 
 /**
  *
  * @author Krisztian
  */
-public class CityPanel extends javax.swing.JPanel {
+public class CityPanel extends javax.swing.JPanel implements ValueListener {
 
     private final Integer height = 500;
     private final Integer width = 200;
+    private List<ValueListener> listeners = new ArrayList<ValueListener>();
+    List<City> list;
 
     /**
      * Creates new form CityPanel
@@ -32,8 +38,8 @@ public class CityPanel extends javax.swing.JPanel {
         if (rbtnNew.isSelected()) {
             cmbCity.setEnabled(false);
             txtName.setEnabled(true);
-            txtCoordX.setEnabled(true);
-            txtCoordY.setEnabled(true);
+            txtCoordX.setEnabled(false);
+            txtCoordY.setEnabled(false);
 
         }
         if (rbtnModDel.isSelected()) {
@@ -41,8 +47,10 @@ public class CityPanel extends javax.swing.JPanel {
             txtName.setEnabled(false);
             txtCoordX.setEnabled(false);
             txtCoordY.setEnabled(false);
+            SetCityToPass((City) cmbCity.getSelectedItem());
 
         }
+        SetComboBox();
         ClearTextBoxes();
 
     }
@@ -94,6 +102,11 @@ public class CityPanel extends javax.swing.JPanel {
         });
         add(rbtnModDel, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 7, -1, -1));
 
+        cmbCity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCityActionPerformed(evt);
+            }
+        });
         add(cmbCity, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 63, 158, -1));
 
         jLabel1.setText("Name:");
@@ -128,20 +141,50 @@ public class CityPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_rbtnNewActionPerformed
 
     private void rbtnModDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnModDelActionPerformed
-       SetGUI();
+        SetGUI();
     }//GEN-LAST:event_rbtnModDelActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        try{
-        Integer Y = Integer.parseInt(txtCoordY.getText());
-        Integer X = Integer.parseInt(txtCoordX.getText());
-        Controller.SaveCity(txtName.getText(),X,Y);
+
+        if (rbtnNew.isSelected()) {
+            List<City> list = Controller.GetCities();
+            try {
+                for (City c : list) {
+                    if (c.getName().equals(txtName.getText())) {
+                        throw new Exception("Name must not be duplicated");
+                    }
+                }
+
+                if (txtName.getText().isEmpty()) {
+                    throw new Exception("Name must not be empty");
+                }
+                Integer Y = Integer.parseInt(txtCoordY.getText());
+                Integer X = Integer.parseInt(txtCoordX.getText());
+                Controller.SaveCity(txtName.getText(), X, Y);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e, "WARNING", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(this,e,"WARNING",ERROR);
+        if (rbtnModDel.isSelected()) {
+            Controller.DeleteCity((City) cmbCity.getSelectedItem());
         }
+        notifyListeners();
+        SetComboBox();
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void cmbCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCityActionPerformed
+        SetCityToPass((City) cmbCity.getSelectedItem());
+    }//GEN-LAST:event_cmbCityActionPerformed
+
+    private void SetComboBox() {
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        List<City> list = Controller.GetCities();
+        for (City c : list) {
+            model.addElement(c);
+        }
+        cmbCity.setModel(model);
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGrp;
@@ -156,4 +199,35 @@ public class CityPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtCoordY;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void OnSubmitted(Integer tab) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void PassCoordinates(Integer X, Integer Y) {
+        if (rbtnNew.isSelected()) {
+            txtCoordX.setText(X.toString());
+            txtCoordY.setText(Y.toString());
+            SetCityToPass(new City(X, Y, " "));
+
+        }
+    }
+
+    private void SetCityToPass(City city) {
+        Controller.setForCityPanel(city);
+        notifyListeners();
+
+    }
+
+    public void addListener(ValueListener listener) {
+        listeners.add(listener);
+    }
+
+    private void notifyListeners() {
+        for (ValueListener listener : listeners) {
+            listener.OnSubmitted(1);
+        }
+    }
 }

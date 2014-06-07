@@ -7,17 +7,20 @@
 package view;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 import main.Controller;
-import main.ValueSubmittedListener;
+import main.ValueListener;
 
 /**
  *
  * @author Krisztian
  */
-public  class MapPanel extends javax.swing.JPanel implements ValueSubmittedListener{
+public  class MapPanel extends javax.swing.JPanel implements ValueListener{
     private final Integer height=445;
     private final Integer width=600;
     private Integer TAB = 3;
+    private List<ValueListener> listeners = new ArrayList<ValueListener>();
 
     /**
      * Creates new form MapPanel
@@ -48,6 +51,11 @@ public  class MapPanel extends javax.swing.JPanel implements ValueSubmittedListe
 
         setBackground(new java.awt.Color(255, 255, 153));
         setMinimumSize(new java.awt.Dimension(600, 500));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -61,6 +69,10 @@ public  class MapPanel extends javax.swing.JPanel implements ValueSubmittedListe
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        notifyListeners(evt.getX()-5, evt.getY()-5);
+    }//GEN-LAST:event_formMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
@@ -69,5 +81,20 @@ public  class MapPanel extends javax.swing.JPanel implements ValueSubmittedListe
     public void OnSubmitted(Integer t) {
         TAB = t;
         this.repaint();
+    }
+
+    @Override
+    public void PassCoordinates(Integer X, Integer Y) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+    
+        public void addListener(ValueListener listener) {
+        listeners.add(listener);
+    }
+    
+        private void notifyListeners(Integer X, Integer Y) {
+        for (ValueListener listener : listeners) {
+            listener.PassCoordinates(X, Y);
+        }
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import main.Controller;
-import main.ValueSubmittedListener;
+import main.ValueListener;
 
 /**
  *
@@ -22,7 +22,7 @@ public class RoutePanel extends javax.swing.JPanel {
 
     private final Integer height = 445;
     private final Integer width = 200;
-    private List<ValueSubmittedListener> listeners = new ArrayList<ValueSubmittedListener>();
+    private List<ValueListener> listeners = new ArrayList<ValueListener>();
 
     public RoutePanel() {
 
@@ -35,12 +35,12 @@ public class RoutePanel extends javax.swing.JPanel {
 
     }
     
-    public void addListener(ValueSubmittedListener listener) {
+    public void addListener(ValueListener listener) {
         listeners.add(listener);
     }
     
         private void notifyListeners() {
-        for (ValueSubmittedListener listener : listeners) {
+        for (ValueListener listener : listeners) {
             listener.OnSubmitted(0);
         }
     }

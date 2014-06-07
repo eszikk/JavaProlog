@@ -57,9 +57,12 @@ public class Routes {
         
         //Tab2
         JPanel tab2 = new JPanel(new BorderLayout());
-        
-        tab2.add(new CityPanel(),BorderLayout.WEST);
-        tab2.add(new MapPanel(),BorderLayout.EAST);
+        CityPanel cPanel = new CityPanel();
+        MapPanel mPanel2 = new MapPanel();
+        mPanel2.addListener(cPanel);
+        cPanel.addListener(mPanel2);
+        tab2.add(cPanel,BorderLayout.WEST);
+        tab2.add(mPanel2,BorderLayout.EAST);
         
         //Tab3
         JPanel tab3 = new JPanel(new BorderLayout());

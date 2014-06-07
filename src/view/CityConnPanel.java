@@ -6,6 +6,9 @@
 
 package view;
 
+import entity.City;
+import main.Controller;
+
 /**
  *
  * @author Krisztian
@@ -58,6 +61,11 @@ public class CityConnPanel extends javax.swing.JPanel {
         cmbRoutes.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -106,6 +114,13 @@ public class CityConnPanel extends javax.swing.JPanel {
                 .addContainerGap(217, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+       City start = new City(0, 0, "test1");
+       City dest = new City(0, 0, "test2");
+        
+        Controller.AddCityConn(start, dest);
+    }//GEN-LAST:event_btnSaveActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

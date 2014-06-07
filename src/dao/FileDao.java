@@ -6,12 +6,14 @@
 package dao;
 
 import entity.City;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileSystemNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -66,18 +68,57 @@ public class FileDao {
         
         System.out.println(""+file.getPath());
 
-        FileWriter fileWritter = new FileWriter(file.getPath(), true);
-        BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
-        bufferWritter.newLine();
-        bufferWritter.write(data);
-        bufferWritter.close();
+        FileWriter fw = new FileWriter(file.getPath(), true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.newLine();
+        bw.write(data);
+        bw.close();
 
         System.out.println("Done:"+data);
 
     }
 
-    public void DeleteCity(City city) {
+    public void DeleteCity (City city) throws IOException{
+            String remove = city.getName()+","+city.getCoordX()+","+city.getCoordY();
 
+      File inFile = new File(saveURL);
+
+      if (!inFile.isFile()) {
+        System.out.println("Parameter is not an existing file");
+        return;
+      }
+      //Construct the new file that will later be renamed to the original filename.
+      File tempFile = new File(inFile.getAbsolutePath() + ".tmp");
+
+      BufferedReader br = new BufferedReader(new FileReader(saveURL));
+      PrintWriter pw = new PrintWriter(new FileWriter(tempFile));
+
+      String line = null;
+
+      //Read from the original file and write to the new
+      //unless content matches data to be removed.
+      while ((line = br.readLine()) != null) {
+
+        if (!line.trim().equals(remove)) {
+
+          pw.println(line);
+          pw.flush();
+        }
+      }
+      pw.close();
+      br.close();
+
+      //Delete the original file
+      if (!inFile.delete()) {
+        System.out.println("Could not delete file");
+        return;
+      }
+
+      //Rename the new file to the filename the original file had.
+      if (!tempFile.renameTo(inFile))
+        System.out.println("Could not rename file");
+
+    
     }
 
 }

@@ -10,6 +10,7 @@ package main;
  *
  * @author Krisztian
  */
-public interface ValueSubmittedListener {
+public interface ValueListener {
     public void OnSubmitted(Integer tab);
+    public void PassCoordinates(Integer X,Integer Y);
 }
