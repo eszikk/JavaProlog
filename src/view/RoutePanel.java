@@ -132,7 +132,7 @@ public class RoutePanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(jlist);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 147, 155, 183));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 147, 155, 200));
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmbStartCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStartCityActionPerformed

@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package view;
 
 import entity.City;
+import entity.Route;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import main.Controller;
+import main.ValueListener;
 
 /**
  *
@@ -17,35 +19,70 @@ import main.Controller;
  */
 public class CityConnPanel extends javax.swing.JPanel {
 
+    private List<ValueListener> listeners = new ArrayList<ValueListener>();
+
+    public void addListener(ValueListener listener) {
+        listeners.add(listener);
+    }
+
+    private void notifyListeners() {
+        for (ValueListener listener : listeners) {
+            listener.OnSubmitted(0);
+        }
+    }
+
     /**
      * Creates new form CityConnPanel
      */
     public CityConnPanel() {
         initComponents();
+        rbtnNew.setSelected(true);
         setGUI();
     }
-    
-    private void setGUI(){
+
+    private void setGUI() {
+        SetCmbRoutes();
         SetCmbBoxStart();
+        btnSave.setEnabled(false);
+        if (rbtnNew.isSelected()) {
+            cmbStart.setEnabled(true);
+            cmbDest.setEnabled(false);
+            listRoutes.setEnabled(false);
+        } else if (rbtnDelete.isSelected()) {
+            cmbStart.setEnabled(false);
+            cmbDest.setEnabled(false);
+            listRoutes.setEnabled(true);
+
+        }
     }
-    
-    private void SetCmbBoxStart(){
-     DefaultComboBoxModel model = new DefaultComboBoxModel();
+
+    private void SetCmbBoxStart() {
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
         List<City> list = Controller.GetCities();
         for (City c : list) {
             model.addElement(c);
         }
         cmbStart.setModel(model);
     }
-    
-    private void SetCmbBoxDest(){
-             DefaultComboBoxModel model = new DefaultComboBoxModel();
+
+    private void SetCmbBoxDest() {
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
         List<City> list = Controller.GetNotP2PConnectedCities((City) cmbStart.getSelectedItem());
         for (City c : list) {
             model.addElement(c);
         }
         cmbDest.setModel(model);
-        
+
+    }
+
+    private void SetCmbRoutes() {
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        List<Route> list = Controller.GetP2PCities();
+        for (Route c : list) {
+            model.addElement(c);
+        }
+        listRoutes.setModel(model);
+
     }
 
     /**
@@ -65,26 +102,52 @@ public class CityConnPanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         cmbDest = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        cmbRoutes = new javax.swing.JComboBox();
         btnSave = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listRoutes = new javax.swing.JList();
+
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Start city:");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 38, -1, -1));
 
         cmbStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbStartActionPerformed(evt);
             }
         });
+        add(cmbStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 53, 155, -1));
 
         btnGrp.add(rbtnNew);
         rbtnNew.setText("New");
+        rbtnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnNewActionPerformed(evt);
+            }
+        });
+        add(rbtnNew, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 7, -1, -1));
 
         btnGrp.add(rbtnDelete);
         rbtnDelete.setText("Delete");
+        rbtnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnNewActionPerformed(evt);
+            }
+        });
+        add(rbtnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 7, -1, -1));
 
         jLabel2.setText("Destination city:");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 79, -1, -1));
+
+        cmbDest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbDestActionPerformed(evt);
+            }
+        });
+        add(cmbDest, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 99, 155, -1));
 
         jLabel3.setText("Routes");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 125, -1, -1));
 
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -92,78 +155,74 @@ public class CityConnPanel extends javax.swing.JPanel {
                 btnSaveActionPerformed(evt);
             }
         });
+        add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 376, 155, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbStart, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmbDest, 0, 155, Short.MAX_VALUE)
-                    .addComponent(cmbRoutes, 0, 155, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(rbtnNew)
-                                .addGap(18, 18, 18)
-                                .addComponent(rbtnDelete))
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rbtnNew)
-                    .addComponent(rbtnDelete))
-                .addGap(8, 8, 8)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbDest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbRoutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44)
-                .addComponent(btnSave)
-                .addContainerGap(217, Short.MAX_VALUE))
-        );
+        listRoutes.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        listRoutes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                listRoutesMouseReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(listRoutes);
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 145, 155, 204));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-       City start = new City(0, 0, "test1");
-       City dest = new City(0, 0, "test2");
-       Controller.GetCitiesWhicHaveConn();
-        
-        //Controller.AddCityConn(start, dest);
-       //Controller.GetP2PConnectedCities(start, dest);
+        if (rbtnNew.isSelected()) {
+            SaveConnection();
+        } else if (rbtnDelete.isSelected()) {
+            if (listRoutes.getSelectedValue() != null) {
+                Controller.DelCityConn((Route) listRoutes.getSelectedValue());
+            } else {
+
+            }
+        }
+        setGUI();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void cmbStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStartActionPerformed
         SetCmbBoxDest();
+        cmbDest.setEnabled(true);
     }//GEN-LAST:event_cmbStartActionPerformed
 
+    private void rbtnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnNewActionPerformed
+        setGUI();
+    }//GEN-LAST:event_rbtnNewActionPerformed
+
+    private void cmbDestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDestActionPerformed
+        btnSave.setEnabled(true);
+    }//GEN-LAST:event_cmbDestActionPerformed
+
+    private void listRoutesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listRoutesMouseReleased
+        if (rbtnDelete.isSelected()) {
+            btnSave.setEnabled(true);
+        }
+    }//GEN-LAST:event_listRoutesMouseReleased
+
+    private void SaveConnection() {
+        System.out.println("VIEW: "+cmbStart.getSelectedItem().toString()+ " "+cmbDest.getSelectedItem().toString());
+        if (cmbStart.getSelectedItem() != null && cmbDest.getSelectedItem() != null) {
+            Controller.AddCityConn((City) cmbStart.getSelectedItem(), (City) cmbDest.getSelectedItem());
+            
+        }
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGrp;
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox cmbDest;
-    private javax.swing.JComboBox cmbRoutes;
     private javax.swing.JComboBox cmbStart;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList listRoutes;
     private javax.swing.JRadioButton rbtnDelete;
     private javax.swing.JRadioButton rbtnNew;
     // End of variables declaration//GEN-END:variables

@@ -6,7 +6,6 @@
 package main;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -66,9 +65,11 @@ public class Routes {
         
         //Tab3
         JPanel tab3 = new JPanel(new BorderLayout());
-        
-        tab3.add(new CityConnPanel(),BorderLayout.WEST);
-        tab3.add(new MapPanel(),BorderLayout.EAST);
+        CityConnPanel ccPanel = new CityConnPanel();
+        MapPanel mPanel3 = new MapPanel();
+        ccPanel.addListener(mPanel3);
+        tab3.add(ccPanel,BorderLayout.WEST);
+        tab3.add(mPanel3,BorderLayout.EAST);
         
         
         JTabbedPane tabPane = new JTabbedPane(JTabbedPane.TOP);

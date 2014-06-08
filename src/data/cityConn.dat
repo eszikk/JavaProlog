@@ -1,17 +1,9 @@
 :- dynamic move/3.
 
-move(loc(budapest), loc(moszkva), 1669).
-move(loc(budapest), loc(warso), 546).
-move(loc(budapest), loc(roma), 796).
-move(loc(moszkva), loc(warso), 1108).
-move(loc(moszkva), loc(london), 2380).
-move(loc(moszkva), loc(budapest), 1669).
-move(loc(warso), loc(london), 1436).
-move(loc(warso), loc(budapest), 546).
-move(loc(london), loc(moszkva), 2380).
-move(loc(london), loc(warso), 1436).
-move(loc(madrid), loc(roma), 1377).
-move(loc(roma), loc(madrid), 1377).
-move(loc(roma), loc(budapest), 796).
-
+move(loc(warso), loc(roma), 1170).
+move(loc(roma), loc(warso), 1170).
+move(loc(roma), loc(budapest), 752).
+move(loc(budapest), loc(roma), 752).
+move(loc(london), loc(budapest), 1497).
+move(loc(budapest), loc(london), 1497).
 

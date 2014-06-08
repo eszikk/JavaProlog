@@ -114,8 +114,8 @@ public class JavaProlog {
         }
         return tagValues;
     }
-    
-    public List<City> GetCitiesWhichHaveConn()throws IOException{
+
+    public List<City> GetCitiesWhichHaveConn() throws IOException {
         Consult();
         FileDao fdao = new FileDao();
         List<City> temp = new ArrayList<>();
@@ -123,29 +123,39 @@ public class JavaProlog {
         List<City> flist = fdao.GetCities();
         String getCities = "move(loc(X),loc(_),_).";
         Query q = new Query(getCities);
-        
-        while(q.hasMoreSolutions()){
+
+        while (q.hasMoreSolutions()) {
             Term t1 = (Term) q.nextSolution().get("X");
             String st = t1.toString();
-            temp.add(new City(0, 0, st));       
+            temp.add(new City(0, 0, st));
         }
         //remove duplicates
-        for(City c: temp){
-            if(!result.contains(c)){
+        for (City c : temp) {
+            if (!result.contains(c)) {
                 result.add(c);
             }
         }
+
+        return MergeDAOs(result);
+
+    }
+    
+    private List<City> MergeDAOs(List<City> list) throws IOException{
+        FileDao fdao = new FileDao();
+        List<City> result = list;
+        List<City> flist = fdao.GetCities();
         
-        //merge with FileDao
-        for(City rc: result){
-                for(City fc:flist){
-                    if(rc.equals(fc)){
-                        rc.setCoordX(fc.getCoordX());
-                        rc.setCoordY(fc.getCoordY());
-                    }
-                    
+                for (City rc : result) {
+            for (City fc : flist) {
+                if (rc.equals(fc)) {
+                    rc.setCoordX(fc.getCoordX());
+                    rc.setCoordY(fc.getCoordY());
                 }
+
+            }
         }
+        
+        
         return result;
         
     }
@@ -160,14 +170,16 @@ public class JavaProlog {
         String addCityConn2 = "assert(move(loc(" + dest + "), loc(" + start + ")," + dist + "))";
         Query addRoutes2 = new Query(addCityConn2);
         Boolean r2 = addRoutes2.hasSolution();
-
+        System.out.println("PROLOG: " +start+" "+dest+" "+dist);
         SaveData();
-
+        Consult();
         return r1 && r2;
     }
 
     public Boolean DelCityConn(String start, String dest, String dist) {
         Consult();
+        
+        
 
         String delCityConn = "retract(move(loc(" + start + "), loc(" + dest + ")," + dist + "))";
         Query delRoutes = new Query(delCityConn);
@@ -185,11 +197,12 @@ public class JavaProlog {
 
         String save = "mod2:save('" + prologCityConnURL + "')";
         Query connUt = new Query(save);
+        
         return connUt.hasSolution();
 
     }
 
-    public Boolean GetP2PConnectedCities(String start, String dest) {
+    public Boolean IsP2PConnectedCities(String start, String dest) {
         Consult();
 
         String connCityStr = "move(loc(" + start + "), loc(" + dest + "), _).";
@@ -199,14 +212,45 @@ public class JavaProlog {
         String connCityStr2 = "move(loc(" + dest + "), loc(" + start + "), _).";
         Query connCityConn2 = new Query(connCityStr2);
         Boolean r2 = connCityConn.hasSolution();
+
+        if (r1 && r2) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+    
+    public List<Route> GetP2PCities() throws IOException{
+        Consult();
+    
+        List<Route> result = new ArrayList<>();
+        List<Route> tmp = new ArrayList<>();
+        String getCitiesStr = "move(loc(X),loc(Y),D)";
+        Query getCities = new Query(getCitiesStr);
         
-        return r1 && r2;
+        while (getCities.hasMoreSolutions()) {
 
+            Term t1 = (Term) getCities.nextSolution().get("X");
+            String start = t1.toString();
+            Term t2 = (Term) getCities.nextSolution().get("Y");
+            String dest = t2.toString();
+            Term t3 = (Term) getCities.nextSolution().get("D");
+            String dist = t3.toString();
+            List<City> temp = new ArrayList<>();
+            temp.add(new City(0, 0, start));
+            temp.add(new City(0, 0, dest));
+            tmp.add(new Route(MergeDAOs(temp), Integer.parseInt(dist)));
+            
+        }
+                for (Route c : tmp) {
+            if (!result.contains(c)) {
+                result.add(c);
+            }
+        }
+
+        return result;
     }
-
-    private Boolean GetP2PRoutes() {
-
-        return true;
-    }
-
 }
+
+
