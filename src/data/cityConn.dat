@@ -12,8 +12,6 @@ move(loc(budapest), loc(ankara), 1334).
 move(loc(ankara), loc(budapest), 1334).
 move(loc(berlin), loc(london), 956).
 move(loc(london), loc(berlin), 956).
-move(loc(berlin), loc(madrid), 2240).
-move(loc(madrid), loc(berlin), 2240).
 move(loc(budapest), loc(berlin), 739).
 move(loc(berlin), loc(budapest), 739).
 

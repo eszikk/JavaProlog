@@ -10,6 +10,7 @@ import entity.Route;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import main.Controller;
 import main.ValueListener;
 
@@ -19,7 +20,7 @@ import main.ValueListener;
  */
 public class CityConnPanel extends javax.swing.JPanel {
 
-    private List<ValueListener> listeners = new ArrayList<ValueListener>();
+    private final List<ValueListener> listeners = new ArrayList<>();
 
     public void addListener(ValueListener listener) {
         listeners.add(listener);
@@ -177,7 +178,10 @@ public class CityConnPanel extends javax.swing.JPanel {
             SaveConnection();
         } else if (rbtnDelete.isSelected()) {
             if (listRoutes.getSelectedValue() != null) {
-                Controller.DelCityConn((Route) listRoutes.getSelectedValue());
+                int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you really want to delete this connection?", "Warning", dialogButton);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                Controller.DelCityConn((Route) listRoutes.getSelectedValue());}
             } else {
 
             }

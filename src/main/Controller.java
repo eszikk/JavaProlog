@@ -128,6 +128,11 @@ public class Controller {
         }
     }
 
+    /**
+     * Draw a city or a city connection to the mapPanel.
+     *
+     * @param g
+     */
     private static void DrawConn(Graphics g) {
         if (cConnPanel.size() == 1) {
             Integer r = 10;
@@ -146,12 +151,12 @@ public class Controller {
             Integer Y = cConnPanel.get(0).getCoordY() - (r / 2);
             Integer X2 = cConnPanel.get(1).getCoordX() - (r / 2);
             Integer Y2 = cConnPanel.get(1).getCoordY() - (r / 2);
-            
+
             g.setColor(Color.GRAY);
             Graphics2D g2 = (Graphics2D) g;
             g2.setStroke(new BasicStroke(3));
-            
-            g2.drawLine(cConnPanel.get(0).getCoordX(), cConnPanel.get(0).getCoordY(), 
+
+            g2.drawLine(cConnPanel.get(0).getCoordX(), cConnPanel.get(0).getCoordY(),
                     cConnPanel.get(1).getCoordX(), cConnPanel.get(1).getCoordY());
 
             g.setColor(Color.red);
@@ -159,14 +164,12 @@ public class Controller {
             g.setFont(new Font("Arial Black", Font.BOLD, 12));
             g.setColor(Color.BLACK);
             g.drawString(cConnPanel.get(0).getName(), X, Y);
-            
+
             g.setColor(Color.red);
             g.fillOval(X2, Y2, r, r);
             g.setFont(new Font("Arial Black", Font.BOLD, 12));
             g.setColor(Color.BLACK);
             g.drawString(cConnPanel.get(1).getName(), X2, Y2);
-
-
 
         }
     }
@@ -178,7 +181,7 @@ public class Controller {
      */
     public static List<City> GetCities() {
         FileDao dao = new FileDao();
-        List<City> result= new ArrayList<>();
+        List<City> result = new ArrayList<>();
         try {
             result = dao.GetCities();
         } catch (IOException ex) {
@@ -226,6 +229,11 @@ public class Controller {
         Controller.routes = routes;
     }
 
+    /**
+     * Set this class cConnPanel attribute. Which is necessary to DrawConn().
+     *
+     * @param list
+     */
     public static void setcConnPanel(List<City> list) {
         Controller.cConnPanel = list;
     }
@@ -265,7 +273,7 @@ public class Controller {
         FileDao fDao = new FileDao();
         try {
             fDao.DeleteCity(city);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -302,10 +310,6 @@ public class Controller {
 
     }
 
-    public static List<Route> GetP2PConnectedCities() {
-        return null;
-    }
-
     /**
      * Get a list of City which are not directly connected.
      *
@@ -333,7 +337,7 @@ public class Controller {
     }
 
     /**
-     * Get a list of city which are have connections.
+     * Get a list of cities which are have connections.
      *
      * @return
      */
@@ -349,6 +353,11 @@ public class Controller {
 
     }
 
+    /**
+     * Get list of cities which are directly connected.
+     *
+     * @return
+     */
     public static List<Route> GetP2PCities() {
         JavaProlog jp = new JavaProlog();
         List<Route> result = new ArrayList<>();

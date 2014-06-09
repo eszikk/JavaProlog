@@ -52,7 +52,6 @@ public class CityPanel extends javax.swing.JPanel implements ValueListener {
             SetCityToPass((City) cmbCity.getSelectedItem());
 
         }
-        
 
     }
 
@@ -163,16 +162,20 @@ public class CityPanel extends javax.swing.JPanel implements ValueListener {
                 Integer X = Integer.parseInt(txtCoordX.getText());
                 Controller.SaveCity(txtName.getText(), X, Y);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e, "WARNING", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, e, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         if (rbtnModDel.isSelected()) {
-            Controller.DeleteCity((City) cmbCity.getSelectedItem());
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you really want to delete city and all of its connections?", "Warning", dialogButton);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                Controller.DeleteCity((City) cmbCity.getSelectedItem());
+            }
         }
         notifyListeners();
         txtName.setText("");
         SetComboBox();
-        
+
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void cmbCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCityActionPerformed
@@ -205,7 +208,7 @@ public class CityPanel extends javax.swing.JPanel implements ValueListener {
 
     @Override
     public void OnSubmitted(Integer tab) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override

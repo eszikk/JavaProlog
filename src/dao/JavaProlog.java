@@ -59,7 +59,7 @@ public class JavaProlog {
         
         String str2 = "retractall(move(_,loc("+city+"),_))";
         Query q2 = new Query(str2);
-        Boolean r2 = q.hasSolution();
+        Boolean r2 = q2.hasSolution();
         q.close();
         
         Boolean r3 = SaveData();

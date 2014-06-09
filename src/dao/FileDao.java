@@ -78,47 +78,46 @@ public class FileDao {
 
     }
 
-    public void DeleteCity(City city) throws IOException {
-        String remove = city.getName() + "," + city.getCoordX() + "," + city.getCoordY();
+    public Boolean DeleteCity(City city) throws Exception {
+        String lineToRemove = city.getName() + "," + city.getCoordX() + "," + city.getCoordY();
+        JavaProlog jPr = new JavaProlog();
+        Boolean deleteOk=false;
+        Boolean renameOk=false;
+        
+        File inputFile = new File(saveURL);
+        File tempFile = new File(inputFile.getAbsolutePath() + ".tmp");
 
-        File inFile = new File(saveURL);
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+        String currentLine;
 
-        if (!inFile.isFile()) {
-            System.out.println("Parameter is not an existing file");
-            return;
-        }
-        //Construct the new file that will later be renamed to the original filename.
-        File tempFile = new File(inFile.getAbsolutePath() + ".tmp");
-
-        BufferedReader br = new BufferedReader(new FileReader(saveURL));
-        PrintWriter pw = new PrintWriter(new FileWriter(tempFile));
-
-        String line = null;
-
-      //Read from the original file and write to the new
-        //unless content matches data to be removed.
-        while ((line = br.readLine()) != null) {
-
-            if (!line.trim().equals(remove)) {
-
-                pw.println(line);
-                pw.flush();
+        while ((currentLine = reader.readLine()) != null) {
+            String trimmedLine = currentLine.trim();
+            if (!trimmedLine.contains(lineToRemove)) {
+                writer.write(trimmedLine);
+                writer.newLine();
             }
         }
-        pw.close();
-        br.close();
+        writer.close();
+        reader.close();
 
-        //Delete the original file
-        if (!inFile.delete()) {
-            System.out.println("Could not delete file");
-            return;
+        try {
+            deleteOk=inputFile.delete();
+        } catch (Exception e) {
+            throw new IOException("Could not delete the file! " + e);
         }
 
-        //Rename the new file to the filename the original file had.
-        if (!tempFile.renameTo(inFile)) {
-            System.out.println("Could not rename file");
+        try {
+            renameOk=tempFile.renameTo(inputFile);
+        } catch (Exception e) {
+            throw new IOException(" Could not rename the file! " + e);
         }
-
+        
+        if(deleteOk && renameOk){
+            return jPr.DeleteCityAllConn(city.getName());
+        }else{
+            return false;
+        }
     }
 
 }
