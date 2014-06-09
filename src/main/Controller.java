@@ -178,12 +178,13 @@ public class Controller {
      */
     public static List<City> GetCities() {
         FileDao dao = new FileDao();
+        List<City> result= new ArrayList<>();
         try {
-            return dao.GetCities();
-        } catch (Exception ex) {
+            result = dao.GetCities();
+        } catch (IOException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return result;
 
     }
 

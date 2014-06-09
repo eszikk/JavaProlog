@@ -172,6 +172,7 @@ public class CityPanel extends javax.swing.JPanel implements ValueListener {
         notifyListeners();
         txtName.setText("");
         SetComboBox();
+        
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void cmbCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCityActionPerformed
@@ -180,7 +181,7 @@ public class CityPanel extends javax.swing.JPanel implements ValueListener {
 
     private void SetComboBox() {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-        List<City> list = Controller.GetCities();
+        list = Controller.GetCities();
         for (City c : list) {
             model.addElement(c);
         }

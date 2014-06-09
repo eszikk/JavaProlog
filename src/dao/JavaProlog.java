@@ -29,7 +29,7 @@ public class JavaProlog {
      * Consulting with prolog files.
      */
     private Boolean Consult() {
-        RetractAll();
+        Clear();
         String connStrUt = "mod1:consult('" + prologUtURL + "')";
         Query connUt = new Query(connStrUt);
         Boolean r1 = connUt.hasSolution();
@@ -42,12 +42,29 @@ public class JavaProlog {
         return r1&&r2;
     }
     
-    private Boolean RetractAll(){
+    private Boolean Clear(){
         String str = "retractall(move(_,_,_))";
         Query q = new Query(str);
         Boolean r1 = q.hasSolution();
         q.close();
         return r1;
+        
+    }
+    
+    public Boolean DeleteCityAllConn(String city){
+        String str = "retractall(move(loc("+city+"),_,_))";
+        Query q = new Query(str);
+        Boolean r1 = q.hasSolution();
+        q.close();
+        
+        String str2 = "retractall(move(_,loc("+city+"),_))";
+        Query q2 = new Query(str2);
+        Boolean r2 = q.hasSolution();
+        q.close();
+        
+        Boolean r3 = SaveData();
+        
+        return r1&&r2&&r3;
         
     }
 
