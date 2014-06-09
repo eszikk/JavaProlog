@@ -66,7 +66,7 @@ public class Route {
         final Route other = (Route) obj;
         if (this.cityList.size() == 2 && other.cityList.size() == 2) {
             if (!Objects.equals(this.cityList.get(0).getName(), other.cityList.get(1).getName())
-                    && !Objects.equals(this.cityList.get(1).getName(), other.cityList.get(0).getName())) {
+                    || !Objects.equals(this.cityList.get(1).getName(), other.cityList.get(0).getName())) {
                 return false;
             }
         } else {

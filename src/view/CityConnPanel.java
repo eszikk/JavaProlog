@@ -27,7 +27,7 @@ public class CityConnPanel extends javax.swing.JPanel {
 
     private void notifyListeners() {
         for (ValueListener listener : listeners) {
-            listener.OnSubmitted(0);
+            listener.OnSubmitted(2);
         }
     }
 
@@ -41,7 +41,7 @@ public class CityConnPanel extends javax.swing.JPanel {
     }
 
     private void setGUI() {
-        SetCmbRoutes();
+        SetRoutesList();
         SetCmbBoxStart();
         btnSave.setEnabled(false);
         if (rbtnNew.isSelected()) {
@@ -75,7 +75,7 @@ public class CityConnPanel extends javax.swing.JPanel {
 
     }
 
-    private void SetCmbRoutes() {
+    private void SetRoutesList() {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
         List<Route> list = Controller.GetP2PCities();
         for (Route c : list) {
@@ -188,6 +188,10 @@ public class CityConnPanel extends javax.swing.JPanel {
     private void cmbStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStartActionPerformed
         SetCmbBoxDest();
         cmbDest.setEnabled(true);
+        List<City> tmp = new ArrayList<>();
+        tmp.add((City) cmbStart.getSelectedItem());
+        Controller.setcConnPanel(tmp);
+        notifyListeners();
     }//GEN-LAST:event_cmbStartActionPerformed
 
     private void rbtnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnNewActionPerformed
@@ -196,11 +200,23 @@ public class CityConnPanel extends javax.swing.JPanel {
 
     private void cmbDestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDestActionPerformed
         btnSave.setEnabled(true);
+        List<City> tmp = new ArrayList<>();
+        tmp.add((City) cmbStart.getSelectedItem());
+        tmp.add((City) cmbDest.getSelectedItem());
+        Controller.setcConnPanel(tmp);
+        notifyListeners();
     }//GEN-LAST:event_cmbDestActionPerformed
 
     private void listRoutesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listRoutesMouseReleased
         if (rbtnDelete.isSelected()) {
             btnSave.setEnabled(true);
+            
+        
+        
+        Controller.setcConnPanel(((Route)listRoutes.getSelectedValue()).getCityList());
+        notifyListeners();
+            
+            
         }
     }//GEN-LAST:event_listRoutesMouseReleased
 

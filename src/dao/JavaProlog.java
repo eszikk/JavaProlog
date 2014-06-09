@@ -23,22 +23,32 @@ public class JavaProlog {
 
     private final String prologUtURL = "src/data/ut.pl";
     private final String prologCityConnURL = "src/data/cityConn.dat";
-    private Pattern pattern = Pattern.compile("loc\\((.+?)\\)");
+    private final Pattern pattern = Pattern.compile("loc\\((.+?)\\)");
 
     /**
      * Consulting with prolog files.
      */
     private Boolean Consult() {
-
+        RetractAll();
         String connStrUt = "mod1:consult('" + prologUtURL + "')";
         Query connUt = new Query(connStrUt);
         Boolean r1 = connUt.hasSolution();
+        connUt.close();
 
         String connStrCityConn = "mod2:consult('" + prologCityConnURL + "')";
         Query connCityConn = new Query(connStrCityConn);
         Boolean r2 = connCityConn.hasSolution();
-
-        return r1 && r2;
+        connCityConn.close();
+        return r1&&r2;
+    }
+    
+    private Boolean RetractAll(){
+        String str = "retractall(move(_,_,_))";
+        Query q = new Query(str);
+        Boolean r1 = q.hasSolution();
+        q.close();
+        return r1;
+        
     }
 
     /**
@@ -84,7 +94,7 @@ public class JavaProlog {
             }
             routes.add(new Route(tagValues, dist));
         }
-
+        getRoutes.close();
         return routes;
     }
 
@@ -112,6 +122,7 @@ public class JavaProlog {
             }
             tagValues.remove(name);
         }
+        q.close();
         return tagValues;
     }
 
@@ -129,6 +140,7 @@ public class JavaProlog {
             String st = t1.toString();
             temp.add(new City(0, 0, st));
         }
+        q.close();
         //remove duplicates
         for (City c : temp) {
             if (!result.contains(c)) {
@@ -139,13 +151,13 @@ public class JavaProlog {
         return MergeDAOs(result);
 
     }
-    
-    private List<City> MergeDAOs(List<City> list) throws IOException{
+
+    private List<City> MergeDAOs(List<City> list) throws IOException {
         FileDao fdao = new FileDao();
         List<City> result = list;
         List<City> flist = fdao.GetCities();
-        
-                for (City rc : result) {
+
+        for (City rc : result) {
             for (City fc : flist) {
                 if (rc.equals(fc)) {
                     rc.setCoordX(fc.getCoordX());
@@ -154,10 +166,9 @@ public class JavaProlog {
 
             }
         }
-        
-        
+
         return result;
-        
+
     }
 
     public Boolean AddCityConn(String start, String dest, String dist) {
@@ -166,28 +177,32 @@ public class JavaProlog {
         String addCityConn = "assert(move(loc(" + start + "), loc(" + dest + ")," + dist + "))";
         Query addRoutes = new Query(addCityConn);
         Boolean r1 = addRoutes.hasSolution();
+        addRoutes.close();
 
         String addCityConn2 = "assert(move(loc(" + dest + "), loc(" + start + ")," + dist + "))";
         Query addRoutes2 = new Query(addCityConn2);
         Boolean r2 = addRoutes2.hasSolution();
-        System.out.println("PROLOG: " +start+" "+dest+" "+dist);
+        addRoutes2.close();
+
+        System.out.println("PROLOG: " + start + " " + dest + " " + dist);
+
         SaveData();
-        Consult();
         return r1 && r2;
     }
 
     public Boolean DelCityConn(String start, String dest, String dist) {
         Consult();
-        
-        
 
         String delCityConn = "retract(move(loc(" + start + "), loc(" + dest + ")," + dist + "))";
         Query delRoutes = new Query(delCityConn);
         Boolean r1 = delRoutes.hasSolution();
+        delRoutes.close();
+
         String delCityConn2 = "retract(move(loc(" + dest + "), loc(" + start + ")," + dist + "))";
         Query delRoutes2 = new Query(delCityConn2);
         Boolean r2 = delRoutes2.hasSolution();
 
+        delRoutes2.close();
         SaveData();
         return r1 && r2;
 
@@ -195,10 +210,12 @@ public class JavaProlog {
 
     private Boolean SaveData() {
 
-        String save = "mod2:save('" + prologCityConnURL + "')";
+        String save = "save('" + prologCityConnURL + "')";
+
         Query connUt = new Query(save);
-        
-        return connUt.hasSolution();
+        connUt.hasSolution();
+        connUt.close();
+        return true;
 
     }
 
@@ -220,15 +237,15 @@ public class JavaProlog {
         }
 
     }
-    
-    public List<Route> GetP2PCities() throws IOException{
+
+    public List<Route> GetP2PCities() throws IOException {
         Consult();
-    
+
         List<Route> result = new ArrayList<>();
         List<Route> tmp = new ArrayList<>();
         String getCitiesStr = "move(loc(X),loc(Y),D)";
         Query getCities = new Query(getCitiesStr);
-        
+
         while (getCities.hasMoreSolutions()) {
 
             Term t1 = (Term) getCities.nextSolution().get("X");
@@ -241,9 +258,9 @@ public class JavaProlog {
             temp.add(new City(0, 0, start));
             temp.add(new City(0, 0, dest));
             tmp.add(new Route(MergeDAOs(temp), Integer.parseInt(dist)));
-            
+
         }
-                for (Route c : tmp) {
+        for (Route c : tmp) {
             if (!result.contains(c)) {
                 result.add(c);
             }
@@ -252,5 +269,3 @@ public class JavaProlog {
         return result;
     }
 }
-
-

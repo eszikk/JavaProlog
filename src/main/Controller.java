@@ -66,13 +66,14 @@ public class Controller {
         } else if (Objects.equals(TAB, TAB_2)) {
             DrawCity(g);
         } else if (Objects.equals(TAB, TAB_3)) {
-
+            DrawConn(g);
         }
 
     }
 
     /**
      * Draw only one city to the mapPanel.
+     *
      * @param g
      */
     private static void DrawCity(Graphics g) {
@@ -86,7 +87,8 @@ public class Controller {
     }
 
     /**
-     *  Draw cities and connections to the mapPanel.
+     * Draw cities and connections to the mapPanel.
+     *
      * @param g
      */
     private static void DrawRoutes(Graphics g) {
@@ -95,16 +97,15 @@ public class Controller {
             Integer Y;
             Integer r = 10;
 
+            g.setColor(Color.GRAY);
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setStroke(new BasicStroke(3));
+
             if (routes.getCityList().size() == 2) {
-                g.setColor(Color.GRAY);
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setStroke(new BasicStroke(3));
+
                 g2.drawLine(routes.getCityList().get(0).getCoordX(), routes.getCityList().get(0).getCoordY(),
                         routes.getCityList().get(1).getCoordX(), routes.getCityList().get(1).getCoordY());
             } else {
-                g.setColor(Color.GRAY);
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setStroke(new BasicStroke(3));
 
                 for (int i = 0; i < routes.getCityList().size() - 1; i++) {
                     g2.drawLine(routes.getCityList().get(i).getCoordX(), routes.getCityList().get(i).getCoordY(),
@@ -127,6 +128,49 @@ public class Controller {
         }
     }
 
+    private static void DrawConn(Graphics g) {
+        if (cConnPanel.size() == 1) {
+            Integer r = 10;
+            Integer X = cConnPanel.get(0).getCoordX() - (r / 2);
+            Integer Y = cConnPanel.get(0).getCoordY() - (r / 2);
+
+            g.setColor(Color.red);
+            g.fillOval(X, Y, r, r);
+            g.setFont(new Font("Arial Black", Font.BOLD, 12));
+            g.setColor(Color.BLACK);
+            g.drawString(cConnPanel.get(0).getName(), X, Y);
+
+        } else if (cConnPanel.size() == 2) {
+            Integer r = 10;
+            Integer X = cConnPanel.get(0).getCoordX() - (r / 2);
+            Integer Y = cConnPanel.get(0).getCoordY() - (r / 2);
+            Integer X2 = cConnPanel.get(1).getCoordX() - (r / 2);
+            Integer Y2 = cConnPanel.get(1).getCoordY() - (r / 2);
+            
+            g.setColor(Color.GRAY);
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setStroke(new BasicStroke(3));
+            
+            g2.drawLine(cConnPanel.get(0).getCoordX(), cConnPanel.get(0).getCoordY(), 
+                    cConnPanel.get(1).getCoordX(), cConnPanel.get(1).getCoordY());
+
+            g.setColor(Color.red);
+            g.fillOval(X, Y, r, r);
+            g.setFont(new Font("Arial Black", Font.BOLD, 12));
+            g.setColor(Color.BLACK);
+            g.drawString(cConnPanel.get(0).getName(), X, Y);
+            
+            g.setColor(Color.red);
+            g.fillOval(X2, Y2, r, r);
+            g.setFont(new Font("Arial Black", Font.BOLD, 12));
+            g.setColor(Color.BLACK);
+            g.drawString(cConnPanel.get(1).getName(), X2, Y2);
+
+
+
+        }
+    }
+
     /**
      * Get city list from FileDao and pass torward.
      *
@@ -144,7 +188,8 @@ public class Controller {
     }
 
     /**
-     * Lists which cities are connected to the parameter. 
+     * Lists which cities are connected to the parameter.
+     *
      * @param par Parameter City Name.
      * @return
      */
@@ -155,6 +200,7 @@ public class Controller {
 
     /**
      * Find the routes between two city.
+     *
      * @param start Start city.
      * @param dest Destination city.
      * @return
@@ -172,15 +218,21 @@ public class Controller {
 
     /**
      * Set this class routes attribute. Which is necessary to DrawRoutes().
+     *
      * @param routes
      */
     public static void setRoutes(Route routes) {
         Controller.routes = routes;
     }
 
+    public static void setcConnPanel(List<City> list) {
+        Controller.cConnPanel = list;
+    }
+
     /**
      * Set this class City cPanel attribute. Which is necessary to DrawCity().
-     * @param c 
+     *
+     * @param c
      */
     public static void setForCityPanel(City c) {
         cPanel = c;
@@ -188,6 +240,7 @@ public class Controller {
 
     /**
      * Commands FileDao to save a new city into city.dat .
+     *
      * @param name New city name
      * @param coordX New City X coordinate.
      * @param coordY New City Y coordinate.
@@ -204,7 +257,8 @@ public class Controller {
 
     /**
      * Commands FileDao to delete city from city.dat.
-     * @param city 
+     *
+     * @param city
      */
     public static void DeleteCity(City city) {
         FileDao fDao = new FileDao();
@@ -217,6 +271,7 @@ public class Controller {
 
     /**
      * Commands JavaProlog to save a new connection.
+     *
      * @param start Start city.
      * @param dest Destination city.
      */
@@ -235,8 +290,8 @@ public class Controller {
 
     /**
      * Command JavaProlog to delete a city connection.
+     *
      * @param route
-     * @param dest
      */
     public static void DelCityConn(Route route) {
         JavaProlog jp = new JavaProlog();
@@ -245,12 +300,14 @@ public class Controller {
         jp.DelCityConn(start, dest, route.getDistance().toString());
 
     }
-    public static List<Route> GetP2PConnectedCities(){
+
+    public static List<Route> GetP2PConnectedCities() {
         return null;
     }
 
     /**
      * Get a list of City which are not directly connected.
+     *
      * @param city
      * @return
      */
@@ -273,10 +330,10 @@ public class Controller {
         return ret;
 
     }
-    
 
     /**
      * Get a list of city which are have connections.
+     *
      * @return
      */
     public static List<City> GetCitiesWhicHaveConn() {
@@ -290,18 +347,18 @@ public class Controller {
         return result;
 
     }
-    
-    public static List<Route> GetP2PCities(){
+
+    public static List<Route> GetP2PCities() {
         JavaProlog jp = new JavaProlog();
         List<Route> result = new ArrayList<>();
         try {
-            result=jp.GetP2PCities();
+            result = jp.GetP2PCities();
         } catch (IOException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return result;
-        
+
     }
 
 }

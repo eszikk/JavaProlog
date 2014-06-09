@@ -35,6 +35,8 @@ public class CityPanel extends javax.swing.JPanel implements ValueListener {
     }
 
     private void SetGUI() {
+        SetComboBox();
+        ClearTextBoxes();
         if (rbtnNew.isSelected()) {
             cmbCity.setEnabled(false);
             txtName.setEnabled(true);
@@ -50,8 +52,7 @@ public class CityPanel extends javax.swing.JPanel implements ValueListener {
             SetCityToPass((City) cmbCity.getSelectedItem());
 
         }
-        SetComboBox();
-        ClearTextBoxes();
+        
 
     }
 
